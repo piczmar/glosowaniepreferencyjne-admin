@@ -1,0 +1,36 @@
+<div class="container">
+    <h1>Edit voting {{voteDef.id}}</h1>
+
+    <form name="voteCreateForm" novalidate="novalidate" class="form-horizontal" ng-submit="voteCreateForm.$valid && updateVoteDef()">
+        <fieldset class="form-group">
+            <label for="description">Description</label>
+           <textarea rows="3" id="description" name="description" class="form-control" ng-model="voteDef.description" placeholder="Give short description for voters" ></textarea>
+        </fieldset>
+        <fieldset class="form-group">
+            <label for="createdAt">Created</label>
+            <span>{{voteDef.createdAt | date:'medium'}}</span><br>
+        </fieldset>
+        <fieldset class="form-group">
+            <label for="updatedAt">Updated</label>
+            <span>{{voteDef.updatedAt | date:'medium'}}</span><br>
+        </fieldset>
+        <fieldset class="form-group">
+            <div ng-controller="VoteFieldCtrl as fCtrl">
+
+                <div class="input-group" ng-repeat="field in voteDef.fields">
+                  <!-- <span class="input-group-addon">{{field.id}}</span> -->
+                  <input type="text" class="form-control" ng-model="field.value"  placeholder="Give new option here..">
+                  <span class="input-group-btn">
+                    <button class="btn btn-default" type="button" ng-click="removeField(field.id, voteDef)" >
+                        <span class="glyphicon glyphicon-remove"></span>
+                    </button>
+                </span>
+            </div>
+            <button type="button" ng-click="addField(voteDef)" class="btn btn-default btn-sm">Add Option</button>
+        </fieldset>
+        <p>{{voteCreateForm.$valid}}</p>
+        <fieldset class="form-group">
+            <input type="submit" class="btn btn-primary pull-right" value="Submit" />
+        </fieldset>
+    </form>
+</div>
