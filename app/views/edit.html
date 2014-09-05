@@ -1,5 +1,5 @@
 <div class="container">
-    <h1>Edit voting {{voteDef.id}}</h1>
+    <h1>Edit voting {{voteDef._id}}</h1>
 
     <form name="voteCreateForm" novalidate="novalidate" class="form-horizontal" ng-submit="voteCreateForm.$valid && updateVoteDef()">
         <fieldset class="form-group">
@@ -7,12 +7,12 @@
            <textarea rows="3" id="description" name="description" class="form-control" ng-model="voteDef.description" placeholder="Give short description for voters" ></textarea>
         </fieldset>
         <fieldset class="form-group">
-            <label for="createdAt">Created</label>
-            <span>{{voteDef.createdAt | date:'medium'}}</span><br>
+            <label for="dateCreated">Created</label>
+            <span>{{voteDef.dateCreated | date:'medium'}}</span><br>
         </fieldset>
         <fieldset class="form-group">
-            <label for="updatedAt">Updated</label>
-            <span>{{voteDef.updatedAt | date:'medium'}}</span><br>
+            <label for="lastUpdated">Updated</label>
+            <span>{{voteDef.lastUpdated | date:'medium'}}</span><br>
         </fieldset>
         <fieldset class="form-group">
             <div ng-controller="VoteFieldCtrl as fCtrl">

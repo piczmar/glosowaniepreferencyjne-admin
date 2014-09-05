@@ -25,10 +25,10 @@ var app = angular.module('clientAdminApp');
 
 
 
-app.controller('VoteDefCreateCtrl', function ($scope, $location, VoteDefFactory) {
+app.controller('VoteDefCreateCtrl', function (BASE_URL,$scope, $http, $location, VoteDefFactory) {
     $scope.voteDefs = VoteDefFactory.voteDefs;
 	$scope.voteDef = {
-		id: idGen.next(),
+		// id: idGen.next(),
 		description: 'some description',
         email: 'some@test.com',
 		fields: [
@@ -39,26 +39,67 @@ app.controller('VoteDefCreateCtrl', function ($scope, $location, VoteDefFactory)
 
 	$scope.createNewVoteDef = function(){
 		console.log('Create vote definition.. ');
-        $scope.voteDef.createdAt = Date.now();
-		VoteDefFactory.voteDefs.push($scope.voteDef);
-		$location.path('/edit/' + $scope.voteDef.id);
-		$scope.voteDef = {};
+
+        $http.post(
+            BASE_URL+'/api/voteDefs',
+            $scope.voteDef,
+            {headers: {'Content-Type': 'application/json'}}
+        )
+        .success(function(data, status, headers, config){
+            console.log("Success: ",data);
+            VoteDefFactory.voteDefs.push(data);
+            $location.path('/edit/' +data._id);
+            $scope.voteDef = {};
+        })
+        .error(function(data, status, headers, config){
+            console.log("Error: ", data);
+        });
+
+		
 	};
 });
 
 
-app.controller('VoteDefEditCtrl', function ($scope, $routeParams, $location, VoteDefFactory) {
+app.controller('VoteDefEditCtrl', function (BASE_URL,$scope, $http, $routeParams, $location, VoteDefFactory) {
+        $scope.init = function () {
+            if ($routeParams.id) {
+                $http.get(
+                    BASE_URL+'/api/voteDefs/'+ $routeParams.id,
+                    {headers: {'Content-Type': 'application/json'}}
+                )
+                .success(function(data, status, headers, config){
+                    console.log("Success: ",data);
+                    $scope.voteDef = data;
+                })
+                .error(function(data, status, headers, config){
+                    console.log("Error: ", data);
+                });
+            } else {
+                //create a new object
+            }
+        }
+        $scope.init();
+
+        $scope.voteDef;
 
         $scope.updateVoteDef = function () {
             // VoteDefFactory.update($scope.voteDef);
-            console.log('Upadting vote ' + $scope.voteDef.id);
-            $scope.voteDef.updatedAt = Date.now();
-            $location.path('/edit/'+ $scope.voteDef.id);
+            console.log('Upadting vote ' + $scope.voteDef._id);
+            $http.put(
+                BASE_URL+'/api/voteDefs',
+                $scope.voteDef,
+                {headers: {'Content-Type': 'application/json'}}
+            )
+            .success(function(data, status, headers, config){
+                console.log("Success: ",data);
+                $scope.voteDef = data;
+                $location.path('/edit/'+ $scope.voteDef._id);
+            })
+            .error(function(data, status, headers, config){
+                console.log("Error: ", data);
+            });
+            
         };
-        $scope.voteDef = VoteDefFactory.voteDefs.filter(function(e){ 
-        	console.log(e.id + ', ' + $routeParams.id);
-        	return ''+e.id === $routeParams.id ;
-        })[0];
 });
 
 
