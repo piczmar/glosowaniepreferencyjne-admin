@@ -27,6 +27,29 @@ module.exports = function (grunt) {
     // Project settings
     yeoman: appConfig,
 
+    ngconstant: {
+      options: {
+        name: 'config',
+        dest: 'app/scripts/config.js'
+      },
+      development: {
+        constants: {
+          PROFILE: "DEVELOPMENT",
+          SERVER_URL: 'http://localhost:8000',
+          USER_SERVER_URL: 'http://localhost:7000',
+          USER_WEB_URL: 'http://localhost:7001'  
+        }
+      },
+      production: {
+        constants: {
+          PROFILE: "PRODUCTION",
+          SERVER_URL: 'http://piczmar.aplikacje.mydevil.net',
+          USER_SERVER_URL: 'http://glosprefuser.aplikacje.mydevil.net',
+          USER_WEB_URL: 'http://piczmar.github.io/glosowaniepreferencyjne-user'
+        }
+      },
+    },
+
     // Watches files for changes and runs tasks based on the changed files
     watch: {
       bower: {
@@ -66,7 +89,7 @@ module.exports = function (grunt) {
     // The actual grunt server settings
     connect: {
       options: {
-        port: 9000,
+        port: 8001,
         // Change this to '0.0.0.0' to access the server from outside.
         hostname: 'localhost',
         livereload: 35729
@@ -366,6 +389,7 @@ module.exports = function (grunt) {
 
     grunt.task.run([
       'clean:server',
+      'ngconstant:development',
       'wiredep',
       'concurrent:server',
       'autoprefixer',
@@ -389,6 +413,7 @@ module.exports = function (grunt) {
 
   grunt.registerTask('build', [
     'clean:dist',
+    'ngconstant:production',
     'wiredep',
     'useminPrepare',
     'concurrent:dist',

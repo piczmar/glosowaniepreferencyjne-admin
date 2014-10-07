@@ -1,5 +1,10 @@
 <div class="container">
     <h1>Edit voting {{voteDef._id}}</h1>
+  
+    <fieldset class="form-group">
+        <label for="userUrl">Send this link to voters:</label>
+        <input id="userUrl" type="text" class="form-control" value="{{userUrl}}" />
+    </fieldset>
 
     <form name="voteCreateForm" novalidate="novalidate" class="form-horizontal" ng-submit="voteCreateForm.$valid && updateVoteDef()">
         <fieldset class="form-group">

@@ -25,7 +25,7 @@ var app = angular.module('clientAdminApp');
 
 
 
-app.controller('VoteDefCreateCtrl', function (BASE_URL,$scope, $http, $location, VoteDefFactory) {
+app.controller('VoteDefCreateCtrl', function (SERVER_URL,$scope, $http, $location, VoteDefFactory) {
     $scope.voteDefs = VoteDefFactory.voteDefs;
 	$scope.voteDef = {
 		// id: idGen.next(),
@@ -41,7 +41,7 @@ app.controller('VoteDefCreateCtrl', function (BASE_URL,$scope, $http, $location,
 		console.log('Create vote definition.. ');
 
         $http.post(
-            BASE_URL+'/api/voteDefs',
+            SERVER_URL+'/api/voteDefs',
             $scope.voteDef,
             {headers: {'Content-Type': 'application/json'}}
         )
@@ -60,16 +60,17 @@ app.controller('VoteDefCreateCtrl', function (BASE_URL,$scope, $http, $location,
 });
 
 
-app.controller('VoteDefEditCtrl', function (BASE_URL,$scope, $http, $routeParams, $location, VoteDefFactory) {
+app.controller('VoteDefEditCtrl', function (SERVER_URL, USER_WEB_URL,$scope, $http, $routeParams, $location, VoteDefFactory) {
         $scope.init = function () {
             if ($routeParams.id) {
                 $http.get(
-                    BASE_URL+'/api/voteDefs/'+ $routeParams.id,
+                    SERVER_URL+'/api/voteDefs/'+ $routeParams.id,
                     {headers: {'Content-Type': 'application/json'}}
                 )
                 .success(function(data, status, headers, config){
                     console.log("Success: ",data);
                     $scope.voteDef = data;
+                    $scope.userUrl = USER_WEB_URL + '/#/start/' + $scope.voteDef._id
                 })
                 .error(function(data, status, headers, config){
                     console.log("Error: ", data);
@@ -79,14 +80,14 @@ app.controller('VoteDefEditCtrl', function (BASE_URL,$scope, $http, $routeParams
             }
         }
         $scope.init();
-
         $scope.voteDef;
-
+        $scope.userUrl;
+   
         $scope.updateVoteDef = function () {
             // VoteDefFactory.update($scope.voteDef);
             console.log('Upadting vote ' + $scope.voteDef._id);
             $http.put(
-                BASE_URL+'/api/voteDefs',
+                SERVER_URL+'/api/voteDefs',
                 $scope.voteDef,
                 {headers: {'Content-Type': 'application/json'}}
             )

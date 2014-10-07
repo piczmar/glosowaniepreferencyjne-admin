@@ -10,6 +10,7 @@
  */
  angular
  .module('clientAdminApp', [
+  'config',
   'ngResource',
   'ngRoute',
   'ngMessages'
@@ -43,6 +44,4 @@
 
   $routeProvider.when('/about', { templateUrl: 'views/about.html', controller: 'AboutCtrl' });
   $routeProvider.otherwise({ redirectTo: '/' });
-})
-.value('BASE_URL','http://piczmar.aplikacje.mydevil.net');
-// .value('BASE_URL', 'http://localhost:8000');
+});
